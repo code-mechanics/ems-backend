@@ -12,7 +12,7 @@ import java.util.List;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
-@RequestMapping(value = "api/v1/course", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
+@RequestMapping(value = "api/v1/course", produces = APPLICATION_JSON_VALUE)
 @RequiredArgsConstructor
 public class CourseController {
     private final CourseService courseService;
@@ -27,12 +27,12 @@ public class CourseController {
         return ResponseEntity.ok(courseService.getAllCourse());
     }
 
-    @PutMapping
+    @PutMapping(consumes = APPLICATION_JSON_VALUE)
     public ResponseEntity<CourseModel> updateCourse(@RequestBody CourseModel courseModel) {
         return ResponseEntity.accepted().body(courseService.updateCourse(courseModel));
     }
 
-    @PostMapping
+    @PostMapping(consumes = APPLICATION_JSON_VALUE)
     public ResponseEntity<CourseModel> createCourse(@RequestBody CourseModel courseModel) {
         return new ResponseEntity<>(courseService.createCourse(courseModel), HttpStatus.CREATED);
     }

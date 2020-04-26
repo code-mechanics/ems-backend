@@ -12,7 +12,7 @@ import java.util.List;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
-@RequestMapping(value = "api/v1/group", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
+@RequestMapping(value = "api/v1/group", produces = APPLICATION_JSON_VALUE)
 @RequiredArgsConstructor
 public class GroupController {
     private final GroupService groupService;
@@ -27,12 +27,12 @@ public class GroupController {
         return ResponseEntity.ok(groupService.getAllGroup());
     }
 
-    @PutMapping
+    @PutMapping(consumes = APPLICATION_JSON_VALUE)
     public ResponseEntity<GroupModel> updateGroup(@RequestBody GroupModel groupModel) {
         return ResponseEntity.accepted().body(groupService.updateGroup(groupModel));
     }
 
-    @PostMapping
+    @PostMapping(consumes = APPLICATION_JSON_VALUE)
     public ResponseEntity<GroupModel> createGroup(@RequestBody GroupModel groupModel) {
         return new ResponseEntity<>(groupService.createGroup(groupModel), HttpStatus.CREATED);
     }

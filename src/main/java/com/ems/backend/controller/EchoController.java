@@ -1,4 +1,4 @@
-package com.ems.backend.Entities;
+package com.ems.backend.controller;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;

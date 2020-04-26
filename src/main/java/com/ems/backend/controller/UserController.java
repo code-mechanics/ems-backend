@@ -12,7 +12,7 @@ import java.util.List;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
-@RequestMapping(value = "api/v1/user", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
+@RequestMapping(value = "api/v1/user", produces = APPLICATION_JSON_VALUE)
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
@@ -27,12 +27,12 @@ public class UserController {
         return ResponseEntity.ok(userService.getAllUser());
     }
 
-    @PutMapping
+    @PutMapping(consumes = APPLICATION_JSON_VALUE)
     public ResponseEntity<UserModel> updateUser(@RequestBody UserModel userModel) {
         return ResponseEntity.accepted().body(userService.updateUser(userModel));
     }
 
-    @PostMapping
+    @PostMapping(consumes = APPLICATION_JSON_VALUE)
     public ResponseEntity<UserModel> createUser(@RequestBody UserModel userModel) {
         return new ResponseEntity<>(userService.createUser(userModel), HttpStatus.CREATED);
     }

@@ -1,5 +1,8 @@
 spring:
   application:
     name: ems-backend
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/ems-backend
 server:
   port: 8091

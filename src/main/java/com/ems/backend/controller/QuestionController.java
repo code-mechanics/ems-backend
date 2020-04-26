@@ -3,7 +3,6 @@ package com.ems.backend.controller;
 import com.ems.backend.model.QuestionModel;
 import com.ems.backend.service.QuestionService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.DomainEvents;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,7 +12,7 @@ import java.util.List;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
-@RequestMapping(value = "api/v1/question", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
+@RequestMapping(value = "api/v1/question", produces = APPLICATION_JSON_VALUE)
 @RequiredArgsConstructor
 public class QuestionController {
     private final QuestionService questionService;
@@ -28,12 +27,12 @@ public class QuestionController {
         return ResponseEntity.ok(questionService.getAllQuestion());
     }
 
-    @PutMapping
+    @PutMapping(consumes = APPLICATION_JSON_VALUE)
     public ResponseEntity<QuestionModel> updateQuestion(@RequestBody QuestionModel questionModel) {
         return ResponseEntity.accepted().body(questionService.updateQuestion(questionModel));
     }
 
-    @PostMapping
+    @PostMapping(consumes = APPLICATION_JSON_VALUE)
     public ResponseEntity<QuestionModel> createQuestion(@RequestBody QuestionModel questionModel) {
         return new ResponseEntity<>(questionService.createQuestion(questionModel), HttpStatus.CREATED);
     }

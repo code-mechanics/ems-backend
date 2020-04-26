@@ -12,7 +12,7 @@ import java.util.List;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
-@RequestMapping(value = "api/v1/org", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
+@RequestMapping(value = "api/v1/org", produces = APPLICATION_JSON_VALUE)
 @RequiredArgsConstructor
 public class OrgController {
     private final OrgService orgService;
@@ -27,12 +27,12 @@ public class OrgController {
         return ResponseEntity.ok(orgService.getAllOrg());
     }
 
-    @PutMapping
+    @PutMapping(consumes = APPLICATION_JSON_VALUE)
     public ResponseEntity<OrgModel> updateOrg(@RequestBody OrgModel orgModel) {
         return ResponseEntity.accepted().body(orgService.updateOrg(orgModel));
     }
 
-    @PostMapping
+    @PostMapping(consumes = APPLICATION_JSON_VALUE)
     public ResponseEntity<OrgModel> createOrg(@RequestBody OrgModel orgModel) {
         return new ResponseEntity<>(orgService.createOrg(orgModel), HttpStatus.CREATED);
     }
