@@ -5,8 +5,10 @@ import com.ems.backend.service.OrgService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -14,6 +16,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @RestController
 @RequestMapping(value = "api/v1/org", produces = APPLICATION_JSON_VALUE)
 @RequiredArgsConstructor
+@PreAuthorize("hasRole('GROUP_ADMIN') or hasRole('ADMIN')")
 public class OrgController {
     private final OrgService orgService;
 
@@ -28,12 +31,12 @@ public class OrgController {
     }
 
     @PutMapping(consumes = APPLICATION_JSON_VALUE)
-    public ResponseEntity<OrgModel> updateOrg(@RequestBody OrgModel orgModel) {
+    public ResponseEntity<OrgModel> updateOrg(@Valid @RequestBody OrgModel orgModel) {
         return ResponseEntity.accepted().body(orgService.updateOrg(orgModel));
     }
 
     @PostMapping(consumes = APPLICATION_JSON_VALUE)
-    public ResponseEntity<OrgModel> createOrg(@RequestBody OrgModel orgModel) {
+    public ResponseEntity<OrgModel> createOrg(@Valid @RequestBody OrgModel orgModel) {
         return new ResponseEntity<>(orgService.createOrg(orgModel), HttpStatus.CREATED);
     }
 

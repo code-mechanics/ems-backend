@@ -16,11 +16,11 @@ import java.util.List;
 public class ResultModel {
     @NotNull
     private String resultId;
-    @NotNull
+    @NotNull(message = "UserId shouldn't be null in result entity")
     private String userId;
-    @NotNull
+    @NotNull(message = "GroupId shouldn't be null in result entity")
     private String groupId;
-    @NotNull
+    @NotNull(message = "CourseId shouldn't be null in result entity")
     private String courseId;
     @Min(value = 1)
     private List<Answer> answers;

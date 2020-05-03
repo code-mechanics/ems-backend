@@ -6,7 +6,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.TypeAlias;
-import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.index.TextIndexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -25,11 +24,11 @@ public class GroupEntity {
     @TextIndexed
     private String groupName;
     private String groupDescription;
-    private List<UserEntity> users;
+    private List<String> users;
     private LocalDate createdAt;
     private String createdBy;
     private LocalDate lastModifiedAt;
     private String lastModifiedBy;
-    private List<UserEntity> contributors;
+    private List<String> contributors;
 
 }

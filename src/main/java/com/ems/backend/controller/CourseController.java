@@ -5,8 +5,10 @@ import com.ems.backend.service.CourseService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -14,6 +16,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @RestController
 @RequestMapping(value = "api/v1/course", produces = APPLICATION_JSON_VALUE)
 @RequiredArgsConstructor
+@PreAuthorize("hasRole('INSTRUCTOR') or hasRole('ADMIN')")
 public class CourseController {
     private final CourseService courseService;
 
@@ -28,12 +31,12 @@ public class CourseController {
     }
 
     @PutMapping(consumes = APPLICATION_JSON_VALUE)
-    public ResponseEntity<CourseModel> updateCourse(@RequestBody CourseModel courseModel) {
+    public ResponseEntity<CourseModel> updateCourse(@Valid @RequestBody CourseModel courseModel) {
         return ResponseEntity.accepted().body(courseService.updateCourse(courseModel));
     }
 
     @PostMapping(consumes = APPLICATION_JSON_VALUE)
-    public ResponseEntity<CourseModel> createCourse(@RequestBody CourseModel courseModel) {
+    public ResponseEntity<CourseModel> createCourse(@Valid @RequestBody CourseModel courseModel) {
         return new ResponseEntity<>(courseService.createCourse(courseModel), HttpStatus.CREATED);
     }
 

@@ -4,6 +4,7 @@ import com.ems.backend.Entities.GroupEntity;
 import com.ems.backend.exception.EntityNotFoundException;
 import com.ems.backend.model.GroupModel;
 import com.ems.backend.repository.GroupRepository;
+import com.ems.backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -16,6 +17,8 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class GroupService {
     private final GroupRepository groupRepository;
+    private final UserRepository userRepository;
+
     private final ModelMapper mapper = new ModelMapper();
 
     public List<GroupModel> getAllGroup() {

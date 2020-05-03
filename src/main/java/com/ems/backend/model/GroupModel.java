@@ -1,5 +1,7 @@
 package com.ems.backend.model;
 
+import com.ems.backend.annotation.UniqueUsers;
+import com.ems.backend.model.security.EmsRole;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,16 +16,17 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 public class GroupModel {
-    @NotNull
     private String groupId;
-    @NotNull
+    @NotNull(message = "Group name cannot be null")
     private String groupName;
     private String groupDescription;
-    private List<UserModel> users;
+    @UniqueUsers(userType = {EmsRole.ROLE_USER}, min = 1)
+    private List<String> users;
     private LocalDate createdAt;
     private String createdBy;
     private LocalDate lastModifiedAt;
     private String lastModifiedBy;
-    private List<UserModel> contributors;
+    @UniqueUsers(userType = {EmsRole.ROLE_INSTRUCTOR , EmsRole.ROLE_ADMIN})
+    private List<String> contributors;
 
 }

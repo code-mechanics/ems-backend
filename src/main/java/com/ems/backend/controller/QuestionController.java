@@ -5,8 +5,10 @@ import com.ems.backend.service.QuestionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -14,6 +16,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @RestController
 @RequestMapping(value = "api/v1/question", produces = APPLICATION_JSON_VALUE)
 @RequiredArgsConstructor
+@PreAuthorize("hasRole('INSTRUCTOR') or hasRole('ADMIN')")
 public class QuestionController {
     private final QuestionService questionService;
 
@@ -28,12 +31,12 @@ public class QuestionController {
     }
 
     @PutMapping(consumes = APPLICATION_JSON_VALUE)
-    public ResponseEntity<QuestionModel> updateQuestion(@RequestBody QuestionModel questionModel) {
+    public ResponseEntity<QuestionModel> updateQuestion(@Valid @RequestBody QuestionModel questionModel) {
         return ResponseEntity.accepted().body(questionService.updateQuestion(questionModel));
     }
 
     @PostMapping(consumes = APPLICATION_JSON_VALUE)
-    public ResponseEntity<QuestionModel> createQuestion(@RequestBody QuestionModel questionModel) {
+    public ResponseEntity<QuestionModel> createQuestion(@Valid @RequestBody QuestionModel questionModel) {
         return new ResponseEntity<>(questionService.createQuestion(questionModel), HttpStatus.CREATED);
     }
 

@@ -6,3 +6,10 @@ spring:
       uri: mongodb://localhost:27017/ems-backend
 server:
   port: 8091
+ems:
+  service:
+    header-validation-enabled: true
+    header-validation-urls: /**
+  app:
+    jwtSecret: emsBackendSecretKey
+    jwtExpirationMs: 7200000 #set for 2-hours

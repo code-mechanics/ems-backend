@@ -17,14 +17,14 @@ import java.util.List;
 public class QuestionModel {
     @NotNull
     private String questionId;
-    @Min(value = 1)
+    @Min(value = 1, message = "Options shouldn't be empty in question entity")
     private List<String> options;
     private QuestionType questionType;
     //TODO : This may be an array.
     private String answer;
-    @NotNull
+    @NotNull(message = "CourseId shouldn't  be empty in question entity")
     private String courseId;
-    @NotNull
+    @NotNull(message = "Question text shouldn't empty in question entity")
     private String questionText;
     private LocalDate createdAt;
     private String createdBy;

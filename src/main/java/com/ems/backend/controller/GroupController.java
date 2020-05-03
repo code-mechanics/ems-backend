@@ -5,8 +5,10 @@ import com.ems.backend.service.GroupService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -14,6 +16,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @RestController
 @RequestMapping(value = "api/v1/group", produces = APPLICATION_JSON_VALUE)
 @RequiredArgsConstructor
+@PreAuthorize("hasRole('INSTRUCTOR') or hasRole('ADMIN')")
 public class GroupController {
     private final GroupService groupService;
 
@@ -28,12 +31,12 @@ public class GroupController {
     }
 
     @PutMapping(consumes = APPLICATION_JSON_VALUE)
-    public ResponseEntity<GroupModel> updateGroup(@RequestBody GroupModel groupModel) {
+    public ResponseEntity<GroupModel> updateGroup(@Valid @RequestBody GroupModel groupModel) {
         return ResponseEntity.accepted().body(groupService.updateGroup(groupModel));
     }
 
     @PostMapping(consumes = APPLICATION_JSON_VALUE)
-    public ResponseEntity<GroupModel> createGroup(@RequestBody GroupModel groupModel) {
+    public ResponseEntity<GroupModel> createGroup(@Valid @RequestBody GroupModel groupModel) {
         return new ResponseEntity<>(groupService.createGroup(groupModel), HttpStatus.CREATED);
     }
 

@@ -25,7 +25,7 @@ public class CourseEntity {
     private String courseId;
     @TextIndexed
     private String courseName;
-    private List<GroupEntity> groups;
+    private List<String> groups;
     private Integer duraton;
     private LocalDate opensAt;
     private LocalDate closesAt;
@@ -33,10 +33,10 @@ public class CourseEntity {
     private boolean hasShuffle;
     private LocalDate createdAt;
     @Indexed
-    private String userId;
+    private String createdBy;
     private LocalDate lastModifiedAt;
     private String lastModifiedBy;
-    private List<UserEntity> contributors;
+    private List<String> contributors;
     private String passCriteria;
     private Integer attempts;
     private boolean hasTimed;
