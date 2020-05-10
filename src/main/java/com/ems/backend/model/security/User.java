@@ -1,6 +1,9 @@
 package com.ems.backend.model.security;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.TypeAlias;
 import org.springframework.data.mongodb.core.mapping.DBRef;
@@ -16,6 +19,9 @@ import java.util.Set;
 @Document(collection = "users")
 @TypeAlias("user")
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class User {
     @Id
     private String id;

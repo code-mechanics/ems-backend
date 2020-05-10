@@ -1,5 +1,6 @@
 package com.ems.backend.Entities;
 
+import com.ems.backend.model.GroupStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -30,5 +31,6 @@ public class GroupEntity {
     private LocalDate lastModifiedAt;
     private String lastModifiedBy;
     private List<String> contributors;
+    private GroupStatus status;
 
 }

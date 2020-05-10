@@ -31,7 +31,7 @@ public class UniqueUsersValidator implements ConstraintValidator<UniqueUsers, Li
 
     @Override
     public boolean isValid(List<String> strings, ConstraintValidatorContext constraintValidatorContext) {
-        if (min > 0 && (strings == null || strings.size() != min)) {
+        if (min > 0 && (strings == null || strings.size() < min)) {
             return false;
         }
         Set<String> collect1 = strings.stream().filter(i -> Collections.frequency(strings, i) > 1)
@@ -51,8 +51,7 @@ public class UniqueUsersValidator implements ConstraintValidator<UniqueUsers, Li
 
     private boolean checkRolesExist(Optional<User> user) {
         if (user.isPresent()) {
-            User userVal = user.get();
-            for (Role role:userVal.getRoles()) {
+            for (Role role:user.get().getRoles()) {
                 if (!emsRoles.contains(role.getName())) {
                     return false;
                 }

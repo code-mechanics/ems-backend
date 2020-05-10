@@ -4,7 +4,6 @@ import com.ems.backend.model.QuestionModel;
 import com.ems.backend.service.QuestionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,30 +16,36 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @RequestMapping(value = "api/v1/question", produces = APPLICATION_JSON_VALUE)
 @RequiredArgsConstructor
 @PreAuthorize("hasRole('INSTRUCTOR') or hasRole('ADMIN')")
+@CrossOrigin(origins = "*", maxAge = 3600)
 public class QuestionController {
     private final QuestionService questionService;
 
     @GetMapping("/{id}")
-    public ResponseEntity<QuestionModel> getQuestionById(@PathVariable String id) {
-        return ResponseEntity.ok(questionService.getQuestion(id));
+    @ResponseStatus(HttpStatus.OK)
+    public QuestionModel getQuestionById(@PathVariable String id) {
+        return questionService.getQuestion(id);
     }
 
     @GetMapping
-    public ResponseEntity<List<QuestionModel>> getAllQuestion() {
-        return ResponseEntity.ok(questionService.getAllQuestion());
+    @ResponseStatus(HttpStatus.OK)
+    public List<QuestionModel> getAllQuestion() {
+        return questionService.getAllQuestion();
     }
 
     @PutMapping(consumes = APPLICATION_JSON_VALUE)
-    public ResponseEntity<QuestionModel> updateQuestion(@Valid @RequestBody QuestionModel questionModel) {
-        return ResponseEntity.accepted().body(questionService.updateQuestion(questionModel));
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    public QuestionModel updateQuestion(@Valid @RequestBody QuestionModel questionModel) {
+        return questionService.updateQuestion(questionModel);
     }
 
     @PostMapping(consumes = APPLICATION_JSON_VALUE)
-    public ResponseEntity<QuestionModel> createQuestion(@Valid @RequestBody QuestionModel questionModel) {
-        return new ResponseEntity<>(questionService.createQuestion(questionModel), HttpStatus.CREATED);
+    @ResponseStatus(HttpStatus.CREATED)
+    public QuestionModel createQuestion(@Valid @RequestBody QuestionModel questionModel) {
+        return questionService.createQuestion(questionModel);
     }
 
     @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
     public void deleteQuestion(@PathVariable String id) {
         questionService.delete(id);
     }

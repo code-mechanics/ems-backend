@@ -6,7 +6,6 @@ import com.ems.backend.repository.RoleRepository;
 import com.ems.backend.repository.UserRepository;
 import com.ems.backend.service.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -36,8 +35,6 @@ public class AuthController {
     private final PasswordEncoder encoder;
 
     private final JwtUtils jwtUtils;
-
-    private final ModelMapper modelMapper = new ModelMapper();
 
     @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
@@ -77,9 +74,7 @@ public class AuthController {
         }
 
         // Create new user's account
-        User user = modelMapper.map(signUpRequest, User.class);
-        user.setId(null);
-        user.setPassword(encoder.encode(signUpRequest.getPassword()));
+        User user = UserOf(signUpRequest);
         Set<String> strRoles = signUpRequest.getRoles();
         Set<Role> roles = new HashSet<>();
 
@@ -88,39 +83,28 @@ public class AuthController {
                     .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
             roles.add(userRole);
         } else {
-            Set<Boolean> collect = strRoles.stream()
+            strRoles.stream()
                     .map(role -> EmsRole.valueOfLabel(role))
                     .map(role -> roleRepository.findByName(role))
                     .filter(Optional::isPresent)
                     .map(Optional::get)
                     .map(role -> roles.add(role))
                     .collect(Collectors.toSet());
-
-//            strRoles.forEach(role -> {
-//                switch (role) {
-//                    case "admin":
-//                        Role adminRole = roleRepository.findByName(EmsRole.ROLE_ADMIN)
-//                                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-//                        roles.add(adminRole);
-//
-//                        break;
-//                    case "mod":
-//                        Role modRole = roleRepository.findByName(EmsRole.ROLE_MODERATOR)
-//                                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-//                        roles.add(modRole);
-//
-//                        break;
-//                    default:
-//                        Role userRole = roleRepository.findByName(EmsRole.ROLE_USER)
-//                                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-//                        roles.add(userRole);
-//                }
-//            });
         }
 
         user.setRoles(roles);
         userRepository.save(user);
 
         return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
+    }
+
+    private User UserOf(SignupRequest signupRequest) {
+        return User.builder()
+                .email(signupRequest.getEmail())
+                .orgId(signupRequest.getOrgId())
+                .password(encoder.encode(signupRequest.getPassword()))
+                .photo(signupRequest.getPhoto())
+                .username(signupRequest.getUsername())
+                .build();
     }
 }

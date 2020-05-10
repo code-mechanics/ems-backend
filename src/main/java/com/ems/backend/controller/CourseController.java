@@ -2,10 +2,11 @@ package com.ems.backend.controller;
 
 import com.ems.backend.model.CourseModel;
 import com.ems.backend.service.CourseService;
+import com.ems.backend.service.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -17,31 +18,43 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @RequestMapping(value = "api/v1/course", produces = APPLICATION_JSON_VALUE)
 @RequiredArgsConstructor
 @PreAuthorize("hasRole('INSTRUCTOR') or hasRole('ADMIN')")
+@CrossOrigin(origins = "*", maxAge = 3600)
 public class CourseController {
     private final CourseService courseService;
 
     @GetMapping("/{id}")
-    public ResponseEntity<CourseModel> getCourseById(@PathVariable String id) {
-        return ResponseEntity.ok(courseService.getCourse(id));
+    @ResponseStatus(HttpStatus.OK)
+    public CourseModel getCourseById(@PathVariable String id) {
+        return courseService.getCourse(id);
     }
 
     @GetMapping
-    public ResponseEntity<List<CourseModel>> getAllCourses() {
-        return ResponseEntity.ok(courseService.getAllCourse());
+    @ResponseStatus(HttpStatus.OK)
+    public List<CourseModel> getAllCourses() {
+        return courseService.getAllCourse();
     }
 
     @PutMapping(consumes = APPLICATION_JSON_VALUE)
-    public ResponseEntity<CourseModel> updateCourse(@Valid @RequestBody CourseModel courseModel) {
-        return ResponseEntity.accepted().body(courseService.updateCourse(courseModel));
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    public CourseModel updateCourse(@Valid @RequestBody CourseModel courseModel) {
+        return courseService.updateCourse(courseModel);
     }
 
     @PostMapping(consumes = APPLICATION_JSON_VALUE)
-    public ResponseEntity<CourseModel> createCourse(@Valid @RequestBody CourseModel courseModel) {
-        return new ResponseEntity<>(courseService.createCourse(courseModel), HttpStatus.CREATED);
+    @ResponseStatus(HttpStatus.CREATED)
+    public CourseModel createCourse(@Valid @RequestBody CourseModel courseModel) {
+        return courseService.createCourse(courseModel);
     }
 
     @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
     public void deleteCourse(@PathVariable String id) {
         courseService.delete(id);
+    }
+
+    @GetMapping("/{getCourses}")
+    @ResponseStatus(HttpStatus.OK)
+    public List<CourseModel> getCourses(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return courseService.getUserCourses(userDetails);
     }
 }

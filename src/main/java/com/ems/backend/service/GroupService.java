@@ -3,12 +3,15 @@ package com.ems.backend.service;
 import com.ems.backend.Entities.GroupEntity;
 import com.ems.backend.exception.EntityNotFoundException;
 import com.ems.backend.model.GroupModel;
+import com.ems.backend.model.GroupStatus;
 import com.ems.backend.repository.GroupRepository;
 import com.ems.backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeToken;
 import org.springframework.stereotype.Service;
 
+import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -58,5 +61,13 @@ public class GroupService {
                 .map(this::getGroup)
                 .map(GroupModel::getGroupId)
                 .ifPresent(groupRepository::deleteById);
+    }
+
+    // Return list of active groups for user
+    public List<GroupModel> getUserGroup(UserDetailsImpl userDetails){
+        String username = userDetails.getEmail();
+        List<GroupEntity> allByUsers = groupRepository.findAllByUsersInAndStatus(username, GroupStatus.ACTIVE);
+        Type listType = new TypeToken<List<GroupModel>>(){}.getType();
+        return mapper.map(allByUsers, listType);
     }
 }

@@ -28,5 +28,6 @@ public class GroupModel {
     private String lastModifiedBy;
     @UniqueUsers(userType = {EmsRole.ROLE_INSTRUCTOR , EmsRole.ROLE_ADMIN})
     private List<String> contributors;
+    private GroupStatus status;
 
 }
